@@ -1,0 +1,18 @@
+[project]
+name = "adk-enhancer"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "google-adk>=1.20.0",
+    "google-cloud-aiplatform>=1.129.0",
+]
+
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+include = ["adk_enhancer"]
