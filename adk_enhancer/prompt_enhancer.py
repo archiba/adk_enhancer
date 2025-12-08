@@ -34,7 +34,7 @@ class PromptEnhancer:
         prompt_id = self.gcp_prompt_ids[agent_name]
         prompt_manager_client: Prompts = VERTEXAI_CLIENT.prompts
         try:
-            prompt_manager_client.get(prompt_id=prompt_id)
+            return prompt_manager_client.get(prompt_id=prompt_id)
         except:
             return None
 
