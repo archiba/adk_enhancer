@@ -10,7 +10,7 @@ resolution-markers = [
 [[package]]
 name = "adk-enhancer"
 version = "0.1.0"
-source = { virtual = "." }
+source = { editable = "." }
 dependencies = [
     { name = "google-adk" },
     { name = "google-cloud-aiplatform" },
