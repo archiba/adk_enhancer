@@ -12,9 +12,7 @@ from vertexai._genai.types.common import (
     Session,
     SessionEvent,
     CreateAgentEngineSessionConfig,
-    AppendAgentEngineSessionEventConfig,
     AgentEngineSessionOperation,
-    AppendAgentEngineSessionEventResponse,
 )
 from adk_enhancer.settings_enhancer import VERTEXAI_CLIENT
 
