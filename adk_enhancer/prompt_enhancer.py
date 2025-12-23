@@ -4,7 +4,7 @@ from vertexai import types as _
 from vertexai._genai.types.common import Prompt, CreatePromptConfig
 from vertexai._genai.prompts import Prompts
 
-from adk_enhancer.settings_enhancer import VERTEXAI_CLIENT
+from .settings_enhancer import VERTEXAI_CLIENT
 
 
 class PromptEnhancer:

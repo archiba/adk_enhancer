@@ -3,6 +3,7 @@ from google.genai.types import GenerateContentConfig, GenerationConfig, Thinking
 from vertexai._genai.types.common import Prompt, SchemaPromptSpecPromptMessage
 from google.adk.planners import BasePlanner, BuiltInPlanner, built_in_planner
 
+
 def prompt_to_generate_content_config(prompt: Prompt) -> GenerateContentConfig:
     prompt_generation_config: GenerationConfig = prompt.prompt_data.generation_config
     prompt_data = prompt.prompt_data

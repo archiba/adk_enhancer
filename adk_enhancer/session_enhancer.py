@@ -14,7 +14,7 @@ from vertexai._genai.types.common import (
     CreateAgentEngineSessionConfig,
     AgentEngineSessionOperation,
 )
-from adk_enhancer.settings_enhancer import VERTEXAI_CLIENT
+from .settings_enhancer import VERTEXAI_CLIENT
 
 
 class AsyncStreamQueryContent(BaseModel):
@@ -81,6 +81,14 @@ class SessionEnhancer:
         sessions_page: Pager[Session] = session_manager.list(name=self.agent_name)
         return sessions_page
 
+    def delete_session(self, session_id: str):
+        session_manager: Sessions = agent_engine_manager.sessions
+        operation_result = session_manager.delete(name=self.session_name(session_id))
+        if not operation_result.done:
+            raise ValueError(operation_result.error)
+        else:
+            return
+
     def get_list_of_session_events(self, session_id: str) -> Pager[SessionEvent]:
         session_manager: Sessions = agent_engine_manager.sessions
         session_event_manager: SessionEvents = session_manager.events
@@ -112,7 +120,7 @@ class SessionEnhancer:
                 raise ValueError("content must be str type.")
         input_data = AsyncStreamQueryContent(
             message=input_parts,
-            user_id="chiba",
+            user_id=user_id,
             session_id=session_id
         )
         async_events = agent_engine.async_stream_query(
@@ -122,13 +130,21 @@ class SessionEnhancer:
 
 
 async def main():
-    enh = SessionEnhancer(project_id="MY_PROJECT", gcp_region_name="us-central1", agent_engine_id="5760169894104530911")
-    session = enh.get_session(session_id="815460220443557855")
-    print(list(enh.get_list_of_session_events(session_id="815460220443557855")))
-    async_events = enh.send_user_message(user_id="chiba", session_id="815460220443557855", content="シニアデータサイエンティストの主な業務：\n大規模データ分散処理・データサイエンティスト・BI・データ可視化")
+    enh = SessionEnhancer(project_id="ntt-njk", gcp_region_name="us-central1", agent_engine_id="5760169894104530944")
+    print(list(enh.get_list_of_sessions()))
+    session = enh.create_new_session(user_id="chiba", session_name="test_session_1", initial_states={"初期情報": "これはテストセッションです。"}, expired_in_n_days=7)
+    session_name = session.name
+    if session_name.endswith("/"):
+        session_name = session_name[:-1]
+    session_id = session_name.split("/")[-1]
+    
+    session = enh.get_session(session_id=session_id)
+    list(enh.get_list_of_session_events(session_id=session_id))
+    async_events = enh.send_user_message(user_id="chiba", session_id=session_id, content="シニアデータサイエンティストの主な業務：\n大規模データ分散処理・データサイエンティスト・BI・データ可視化")
     async for event in async_events:
-        print(type(event))
-        print(event)
+        pass
+    enh.delete_session(session_id=session_id)
+
 
 if __name__ == "__main__":
     import asyncio
