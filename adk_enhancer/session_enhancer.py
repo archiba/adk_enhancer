@@ -127,25 +127,3 @@ class SessionEnhancer:
             **input_data.model_dump()
         )
         return async_events
-
-
-async def main():
-    enh = SessionEnhancer(project_id="ntt-njk", gcp_region_name="us-central1", agent_engine_id="5760169894104530944")
-    print(list(enh.get_list_of_sessions()))
-    session = enh.create_new_session(user_id="chiba", session_name="test_session_1", initial_states={"初期情報": "これはテストセッションです。"}, expired_in_n_days=7)
-    session_name = session.name
-    if session_name.endswith("/"):
-        session_name = session_name[:-1]
-    session_id = session_name.split("/")[-1]
-    
-    session = enh.get_session(session_id=session_id)
-    list(enh.get_list_of_session_events(session_id=session_id))
-    async_events = enh.send_user_message(user_id="chiba", session_id=session_id, content="シニアデータサイエンティストの主な業務：\n大規模データ分散処理・データサイエンティスト・BI・データ可視化")
-    async for event in async_events:
-        pass
-    enh.delete_session(session_id=session_id)
-
-
-if __name__ == "__main__":
-    import asyncio
-    asyncio.run(main())
